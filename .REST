@@ -1,0 +1,15 @@
+// Crear Usuario
+
+POST http://localhost:3000/Usuarios
+
+
+
+Content-Type: application/json
+
+
+//Eliminar Usuario
+
+{
+    "CorreoElectronico": "",
+    "Contrasena": ""
+  }

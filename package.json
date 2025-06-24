@@ -1,5 +1,26 @@
 {
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "pg": "^8.16.0"
-  }
+  },
+  "name": "zwap-1",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoseKukiolka/Zwap.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoseKukiolka/Zwap/issues"
+  },
+  "homepage": "https://github.com/JoseKukiolka/Zwap#readme",
+  "description": ""
 }
