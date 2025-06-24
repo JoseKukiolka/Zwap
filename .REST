@@ -1,15 +1,20 @@
-// Crear Usuario
-
-POST http://localhost:3000/Usuarios
+### Crear un nuevo usuario
 
 
+POST http://localhost:3001/usuarios  
 
 Content-Type: application/json
 
-
-//Eliminar Usuario
-
 {
-    "CorreoElectronico": "",
-    "Contrasena": ""
-  }
+  "Nombre": "Lucía",
+  "Apellido": "González",
+  "Dni": "44556677",
+  "CorreoElectronico": "lucia@mail.com",
+  "Contrasena": "segura123",
+  "NumeroTelefono": "1144556677",
+  "Nacionalidad": "Argentina",
+  "Pais": "Argentina",
+  "ProvinciaEstado": "Córdoba",
+  "Ciudad": "Córdoba Capital",
+  "Direccion": "San Martín 456"
+}
