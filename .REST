@@ -10,11 +10,11 @@ Content-Type: application/json
   "Apellido": "González",
   "Dni": "44556677",
   "CorreoElectronico": "lucia@mail.com",
-  "Contrasena": "segura123",
+  "Contrasena": "Contrasena",
   "NumeroTelefono": "1144556677",
   "Nacionalidad": "Argentina",
   "Pais": "Argentina",
-  "ProvinciaEstado": "Córdoba",
-  "Ciudad": "Córdoba Capital",
+  "ProvinciaEstado": "Buenos Aires",
+  "Ciudad": "Caba",
   "Direccion": "San Martín 456"
 }

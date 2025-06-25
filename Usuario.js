@@ -3,7 +3,7 @@ import { client } from "./db.js";
 // Crear un Usuario
 
 import bcrypt from 'bcrypt';
-import { client } from './db.js'; // tu conexión a PostgreSQL
+import { client } from './db.js';
 
 export const createUsuario = async (req, res) => {
   const {
@@ -20,8 +20,11 @@ export const createUsuario = async (req, res) => {
     Direccion
   } = req.body;
 
+  if (!Nombre || !Apellido || !Dni || !CorreoElectronico || !Contrasena) {
+    return res.status(400).json({ message: "Faltan campos obligatorios" });
+  }
+
   try {
-    // Hashear la contraseña
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(Contrasena, saltRounds);
 
@@ -34,7 +37,7 @@ export const createUsuario = async (req, res) => {
         Nombre,
         Apellido,
         Dni,
-        hashedPassword, // Guardás la contraseña ya hasheada
+        hashedPassword,
         CorreoElectronico,
         NumeroTelefono,
         Nacionalidad,
@@ -48,7 +51,11 @@ export const createUsuario = async (req, res) => {
     res.status(201).json({ message: "Usuario creado correctamente", usuario: rows[0] });
   } catch (error) {
     console.error("Error al crear el usuario:", error);
-    res.status(500).json({ message: "Error al crear el usuario" });
+    if (error.code === '23505') {
+      res.status(409).json({ message: "El DNI o correo ya están registrados" });
+    } else {
+      res.status(500).json({ message: "Error al crear el usuario" });
+    }
   }
 };
 
@@ -92,6 +99,69 @@ export const deleteUsuario = async (req, res) => {
   } catch (error) {
     console.error("Error al eliminar el usuario:", error);
     res.status(500).json({ message: "Error del servidor al intentar eliminar el usuario" });
+  }
+};
+
+// Modificar datos de un usuario ya registrado:
+// Actualizar Usuario
+
+export const updateUsuario = async (req, res) => {
+  const { dni } = req.params;
+  const {
+    Nombre,
+    Apellido,
+    CorreoElectronico,
+    NumeroTelefono,
+    Nacionalidad,
+    Pais,
+    ProvinciaEstado,
+    Ciudad,
+    Direccion
+  } = req.body;
+
+  try {
+    // Verificamos que el usuario exista
+    const result = await client.query(
+      `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
+      [CorreoElectronico]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Actualizamos los datos
+    const update = await client.query(
+      `UPDATE public."Usuario"
+       SET "Nombre" = $1,
+           "Apellido" = $2,
+           "CorreoElectronico" = $3,
+           "NumeroTelefono" = $4,
+           "Nacionalidad" = $5,
+           "Pais" = $6,
+           "ProvinciaEstado" = $7,
+           "Ciudad" = $8,
+           "Direccion" = $9
+       WHERE "Dni" = $10
+       RETURNING *`,
+      [
+        Nombre,
+        Apellido,
+        CorreoElectronico,
+        NumeroTelefono,
+        Nacionalidad,
+        Pais,
+        ProvinciaEstado,
+        Ciudad,
+        Direccion,
+        dni
+      ]
+    );
+
+    res.json({ message: "Usuario actualizado correctamente", usuario: update.rows[0] });
+  } catch (error) {
+    console.error("Error al actualizar el usuario:", error);
+    res.status(500).json({ message: "Error del servidor al actualizar el usuario" });
   }
 };
 
