@@ -1,8 +1,6 @@
 ### Crear un nuevo usuario
 
-
-POST http://localhost:3000/usuarios  
-
+POST http://localhost:3000/usuarios
 Content-Type: application/json
 
 {
@@ -10,11 +8,13 @@ Content-Type: application/json
   "Apellido": "González",
   "Dni": "44556677",
   "CorreoElectronico": "lucia@mail.com",
-  "Contrasena": "Contrasena",
   "NumeroTelefono": "1144556677",
   "Nacionalidad": "Argentina",
   "Pais": "Argentina",
   "ProvinciaEstado": "Buenos Aires",
-  "Ciudad": "Caba",
-  "Direccion": "San Martín 456"
+  "Ciudad": "CABA",
+  "Direccion": "San Martín 456",
+  "Contrasena": "Contrasena123"
 }
+
+###

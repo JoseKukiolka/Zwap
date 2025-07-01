@@ -37,5 +37,5 @@ export const createPublicacion = async (req, res) => {
     }
   };
 
-  
+
   

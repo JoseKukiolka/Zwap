@@ -1,10 +1,7 @@
-import { client } from "./db.js";
-
-// Crear un Usuario
-
 import bcrypt from 'bcrypt';
 import { client } from './db.js';
 
+// Crear Usuario
 export const createUsuario = async (req, res) => {
   const {
     Nombre,
@@ -47,7 +44,7 @@ export const createUsuario = async (req, res) => {
         Direccion
       ]
     );
-
+    
     res.status(201).json({ message: "Usuario creado correctamente", usuario: rows[0] });
   } catch (error) {
     console.error("Error al crear el usuario:", error);
@@ -59,17 +56,11 @@ export const createUsuario = async (req, res) => {
   }
 };
 
-
-  //Eliminar Usuario
-
-  import bcrypt from 'bcrypt';
-import { client } from './db.js';
-
+// Eliminar Usuario
 export const deleteUsuario = async (req, res) => {
   const { CorreoElectronico, Contrasena } = req.body;
 
   try {
-    // 1. Buscar usuario por correo
     const result = await client.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
@@ -77,19 +68,16 @@ export const deleteUsuario = async (req, res) => {
 
     const usuario = result.rows[0];
 
-    // 2. Verificar si existe
     if (!usuario) {
       return res.status(404).json({ message: "Correo no registrado" });
     }
 
-    // 3. Comparar la contraseña ingresada con el hash guardado
     const esValida = await bcrypt.compare(Contrasena, usuario.Contrasena);
 
     if (!esValida) {
       return res.status(401).json({ message: "Contraseña incorrecta" });
     }
 
-    // 4. Si la contraseña es válida, eliminar el usuario
     await client.query(
       `DELETE FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
@@ -102,13 +90,9 @@ export const deleteUsuario = async (req, res) => {
   }
 };
 
-// Modificar datos de un usuario ya registrado:
 // Actualizar Usuario
-
 export const updateUsuario = async (req, res) => {
-  const { CorreoElectronico: correoParam } = req.params;
-  //`correoParam` para buscar al usuario en la base de datos
-  // y `CorreoElectronico` para actualizar el nuevo correo (si se permite)
+  const { dni } = req.params; // Recibir dni como parámetro en la ruta
   const {
     Nombre,
     Apellido,
@@ -116,13 +100,13 @@ export const updateUsuario = async (req, res) => {
     NumeroTelefono,
     Nacionalidad,
     Pais,
-    ProvinciaEstado,  
+    ProvinciaEstado,
     Ciudad,
-    Direccion
+    Direccion,
+    Contrasena
   } = req.body;
 
   try {
-    // Verificamos que el usuario exista
     const result = await client.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
@@ -132,23 +116,25 @@ export const updateUsuario = async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    // Actualizamos los datos
     const update = await client.query(
       `UPDATE public."Usuario"
        SET "Nombre" = $1,
            "Apellido" = $2,
-           "CorreoElectronico" = $3,
-           "NumeroTelefono" = $4,
-           "Nacionalidad" = $5,
-           "Pais" = $6,
-           "ProvinciaEstado" = $7,
-           "Ciudad" = $8,
-           "Direccion" = $9
-       WHERE "Dni" = $10
+           "Dni" = $3,
+           "CorreoElectronico" = $4,
+           "NumeroTelefono" = $5,
+           "Nacionalidad" = $6,
+           "Pais" = $7,
+           "ProvinciaEstado" = $8,
+           "Ciudad" = $9,
+           "Direccion" = $10,
+           "Contrasena"= $11
+       WHERE "CorreoElectronico" = $12
        RETURNING *`,
       [
         Nombre,
         Apellido,
+        Dni,
         CorreoElectronico,
         NumeroTelefono,
         Nacionalidad,
@@ -156,7 +142,7 @@ export const updateUsuario = async (req, res) => {
         ProvinciaEstado,
         Ciudad,
         Direccion,
-        dni
+        Contrasena
       ]
     );
 
@@ -166,4 +152,3 @@ export const updateUsuario = async (req, res) => {
     res.status(500).json({ message: "Error del servidor al actualizar el usuario" });
   }
 };
-
