@@ -1,7 +1,7 @@
 ### Crear un nuevo usuario
 
 
-POST http://localhost:3001/usuarios  
+POST http://localhost:3000/usuarios  
 
 Content-Type: application/json
 

@@ -106,7 +106,9 @@ export const deleteUsuario = async (req, res) => {
 // Actualizar Usuario
 
 export const updateUsuario = async (req, res) => {
-  const { dni } = req.params;
+  const { CorreoElectronico: correoParam } = req.params;
+  //`correoParam` para buscar al usuario en la base de datos
+  // y `CorreoElectronico` para actualizar el nuevo correo (si se permite)
   const {
     Nombre,
     Apellido,
@@ -114,7 +116,7 @@ export const updateUsuario = async (req, res) => {
     NumeroTelefono,
     Nacionalidad,
     Pais,
-    ProvinciaEstado,
+    ProvinciaEstado,  
     Ciudad,
     Direccion
   } = req.body;
