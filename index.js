@@ -10,7 +10,9 @@ import {
   createUsuario,
   deleteUsuario,
   updateUsuario,
-  loginUsuario
+  loginUsuario,
+  solicitarCodigo, 
+  cambiarContrasenaConCodigo
 
 } from "./Usuario.js";
 
@@ -30,6 +32,14 @@ app.put("/Usuario/:CorreoElectronico", updateUsuario);
 
 //Inicio Sesion
 app.post("/login", loginUsuario);
+
+// Pedir codigo para cambiar la contraseña
+app.post("/recuperar", solicitarCodigo);
+
+//Cambiar la contraseña
+app.post("/restablecer", cambiarContrasenaConCodigo);
+
+
 
 
 

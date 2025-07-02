@@ -162,9 +162,6 @@ export const updateUsuario = async (req, res) => {
 
 //Inicio Sesion
 
-import bcrypt from "bcrypt";
-import { client } from "./db.js";
-
 export const loginUsuario = async (req, res) => {
   const { CorreoElectronico, Contrasena } = req.body;
 
@@ -196,6 +193,100 @@ export const loginUsuario = async (req, res) => {
     }});
   } catch (error) {
     console.error("Error en login:", error);
+    res.status(500).json({ message: "Error del servidor" });
+  }
+};
+
+// Recuperar / Cambiar contraseña
+
+export const solicitarCodigo = async (req, res) => {
+  const { CorreoElectronico } = req.body;
+
+  try {
+    // Verificamos que el usuario exista
+    const result = await client.query(
+      `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
+      [CorreoElectronico]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Correo no registrado" });
+    }
+
+    // Crear código aleatorio
+    const codigo = Math.floor(100000 + Math.random() * 900000).toString(); // Ej: 6 dígitos
+    const expira = new Date(Date.now() + 10 * 60000); // 10 minutos
+
+    // Guardar o actualizar en la tabla Recuperacion
+    await client.query(`
+      INSERT INTO "Recuperacion" ("CorreoElectronico", "Codigo", "Expira")
+      VALUES ($1, $2, $3)
+      ON CONFLICT ("CorreoElectronico")
+      DO UPDATE SET "Codigo" = $2, "Expira" = $3
+    `, [CorreoElectronico, codigo, expira]);
+
+    // Enviar correo con código
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'tuCorreo@gmail.com',
+        pass: 'tuContraseñaAppGoogle' // No tu contraseña real
+      }
+    });
+
+    await transporter.sendMail({
+      from: 'tuCorreo@gmail.com',
+      to: CorreoElectronico,
+      subject: 'Código para restablecer tu contraseña',
+      text: `Tu código de recuperación es: ${codigo}`
+    });
+
+    res.json({ message: "Código enviado al correo" });
+  } catch (error) {
+    console.error("Error al enviar el código:", error);
+    res.status(500).json({ message: "Error del servidor" });
+  }
+};
+
+export const cambiarContrasenaConCodigo = async (req, res) => {
+  const { CorreoElectronico, Codigo, NuevaContrasena } = req.body;
+
+  try {
+    const result = await client.query(
+      `SELECT * FROM "Recuperacion" WHERE "CorreoElectronico" = $1`,
+      [CorreoElectronico]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ message: "No se solicitó código para este correo" });
+    }
+
+    const { Codigo: codigoDB, Expira } = result.rows[0];
+
+    if (codigoDB !== Codigo) {
+      return res.status(400).json({ message: "Código incorrecto" });
+    }
+
+    if (new Date() > new Date(Expira)) {
+      return res.status(400).json({ message: "Código expirado" });
+    }
+
+    // Hashear la nueva contraseña
+    const hashedPassword = await bcrypt.hash(NuevaContrasena, 10);
+
+    // Actualizar contraseña
+    await client.query(`
+      UPDATE "Usuario"
+      SET "Contrasena" = $1
+      WHERE "CorreoElectronico" = $2
+    `, [hashedPassword, CorreoElectronico]);
+
+    // Eliminar código de recuperación
+    await client.query(`DELETE FROM "Recuperacion" WHERE "CorreoElectronico" = $1`, [CorreoElectronico]);
+
+    res.json({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    console.error("Error al cambiar contraseña:", error);
     res.status(500).json({ message: "Error del servidor" });
   }
 };

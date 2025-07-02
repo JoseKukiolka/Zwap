@@ -55,3 +55,20 @@ Content-Type: application/json
   "Contrasena": "Contraseña"
 }
 
+### Pedir codigo para cambiar la contraseña
+POST http://localhost:3000/recuperar
+Content-Type: application/json
+
+{
+  "CorreoElectronico": "abc@gmail.com"
+}
+
+### Cambiar la contraseña 
+POST http://localhost:3000/restablecer
+Content-Type: application/json
+
+{
+  "CorreoElectronico": "abc@gmail.com",
+  "Codigo": "123456",
+  "NuevaContrasena": "Nueva123"
+}
