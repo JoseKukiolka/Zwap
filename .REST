@@ -1,4 +1,4 @@
-### Crear un nuevo usuario
+### Crear un nuevo usuario (Funciona)
 
 POST http://localhost:3000/usuarios
 Content-Type: application/json
@@ -17,4 +17,14 @@ Content-Type: application/json
   "Contrasena": "Password"
 }
 
-###
+### Eliminar un usuario (Funciona)
+
+DELETE http://localhost:3000/Usuario
+Content-Type: application/json
+
+{
+  "CorreoElectronico": "abc@gmail.com",
+  "Contrasena": "Password"
+}
+
+

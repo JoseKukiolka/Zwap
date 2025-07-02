@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 app.post("/usuarios", createUsuario);
 
 // Ruta para eliminar usuario (DELETE)
-app.delete("/usuarios/:dni", deleteUsuario);
+app.delete("/Usuario", deleteUsuario);
 
 const PORT = 3000;
 app.listen(PORT, () => {
