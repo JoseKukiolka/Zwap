@@ -9,7 +9,9 @@ app.use(express.json());
 import {
   createUsuario,
   deleteUsuario,
-  updateUsuario
+  updateUsuario,
+  loginUsuario
+
 } from "./Usuario.js";
 
 // Ruta raíz - simple para testear servidor
@@ -25,6 +27,10 @@ app.delete("/Usuario", deleteUsuario);
 
 //Actualizar usuario
 app.put("/Usuario/:CorreoElectronico", updateUsuario);
+
+//Inicio Sesion
+app.post("/login", loginUsuario);
+
 
 
 const PORT = 3000;

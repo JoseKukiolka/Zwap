@@ -159,3 +159,43 @@ export const updateUsuario = async (req, res) => {
     res.status(500).json({ message: "Error del servidor al actualizar el usuario" });
   }
 };
+
+//Inicio Sesion
+
+import bcrypt from "bcrypt";
+import { client } from "./db.js";
+
+export const loginUsuario = async (req, res) => {
+  const { CorreoElectronico, Contrasena } = req.body;
+
+  try {
+    // 1. Buscar usuario por correo
+    const result = await client.query(
+      `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
+      [CorreoElectronico]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: "Correo o contraseña incorrectos" });
+    }
+
+    const usuario = result.rows[0];
+
+    // 2. Comparar contraseña con bcrypt
+    const passMatch = await bcrypt.compare(Contrasena, usuario.Contrasena);
+
+    if (!passMatch) {
+      return res.status(401).json({ message: "Correo o contraseña incorrectos" });
+    }
+
+    // 3. Login exitoso - devolver datos o token
+    res.json({ message: "Inicio de sesión exitoso", usuario: {
+      Nombre: usuario.Nombre,
+      Apellido: usuario.Apellido,
+      CorreoElectronico: usuario.CorreoElectronico,
+    }});
+  } catch (error) {
+    console.error("Error en login:", error);
+    res.status(500).json({ message: "Error del servidor" });
+  }
+};

@@ -46,5 +46,12 @@ Content-Type: application/json
   "Contrasena": "Contraseña"
 }
 
+### Inicio Sesion
+POST http://localhost:3000/login
+Content-Type: application/json
 
+{
+  "CorreoElectronico": "abc@gmail.com",
+  "Contrasena": "Contraseña"
+}
 
