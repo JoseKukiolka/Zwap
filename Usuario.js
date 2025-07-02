@@ -96,8 +96,9 @@ export const deleteUsuario = async (req, res) => {
 };
 
 // Actualizar Usuario
+
 export const updateUsuario = async (req, res) => {
-  const { CorreoElectronico } = req.params; // ahora viene por la URL
+  const { CorreoElectronico } = req.params;  // viene por URL
   const {
     Nombre,
     Apellido,

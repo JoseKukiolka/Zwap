@@ -1,13 +1,15 @@
 import express from "express";
 import cors from "cors";
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 import {
   createUsuario,
-  deleteUsuario
+  deleteUsuario,
+  updateUsuario
 } from "./Usuario.js";
 
 // Ruta raíz - simple para testear servidor
@@ -20,6 +22,10 @@ app.post("/usuarios", createUsuario);
 
 // Ruta para eliminar usuario (DELETE)
 app.delete("/Usuario", deleteUsuario);
+
+//Actualizar usuario
+app.put("/Usuario/:CorreoElectronico", updateUsuario);
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

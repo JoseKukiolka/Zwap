@@ -27,4 +27,24 @@ Content-Type: application/json
   "Contrasena": "Password"
 }
 
+### Actualizar Usuario (Funciona)
+
+PUT http://localhost:3000/Usuario/abc@gmail.com
+Content-Type: application/json
+
+{
+
+ "Nombre": "Jose",
+  "Apellido": "Kukiolka",
+  "Dni": "12345678",
+  "NumeroTelefono": "1122334455",
+  "Nacionalidad": "Argentina",
+  "Pais": "Argentina",
+  "ProvinciaEstado": "Buenos Aires",
+  "Ciudad": "CABA",
+  "Direccion": "Montañeses 2345 ",
+  "Contrasena": "Contraseña"
+}
+
+
 
