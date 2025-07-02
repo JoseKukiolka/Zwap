@@ -4,17 +4,17 @@ POST http://localhost:3000/usuarios
 Content-Type: application/json
 
 {
-  "Nombre": "Lucía",
-  "Apellido": "González",
-  "Dni": "44556677",
-  "CorreoElectronico": "lucia@mail.com",
-  "NumeroTelefono": "1144556677",
+  "Nombre": "Jose",
+  "Apellido": "Kukiolka",
+  "Dni": "48459624",
+  "CorreoElectronico": "abc@gmail.com",
+  "NumeroTelefono": "116883424",
   "Nacionalidad": "Argentina",
   "Pais": "Argentina",
   "ProvinciaEstado": "Buenos Aires",
   "Ciudad": "CABA",
-  "Direccion": "San Martín 456",
-  "Contrasena": "Contrasena123"
+  "Direccion": "Quesad 1300",
+  "Contrasena": "Password"
 }
 
 ###

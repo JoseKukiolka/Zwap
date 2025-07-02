@@ -17,13 +17,22 @@ export const createUsuario = async (req, res) => {
     Direccion
   } = req.body;
 
-  if (!Nombre || !Apellido || !Dni || !CorreoElectronico || !Contrasena) {
+  if (!Nombre || !Apellido || !CorreoElectronico || !Contrasena) {
     return res.status(400).json({ message: "Faltan campos obligatorios" });
   }
 
   try {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(Contrasena, saltRounds);
+    // Verificar si el correo ya existe
+    const existente = await client.query(
+      `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
+      [CorreoElectronico]
+    );
+
+    if (existente.rows.length > 0) {
+      return res.status(409).json({ message: "El correo ya está registrado" });
+    }
+
+    const hashedPassword = await bcrypt.hash(Contrasena, 10);
 
     const { rows } = await client.query(
       `INSERT INTO public."Usuario" 
@@ -44,15 +53,11 @@ export const createUsuario = async (req, res) => {
         Direccion
       ]
     );
-    
+
     res.status(201).json({ message: "Usuario creado correctamente", usuario: rows[0] });
   } catch (error) {
     console.error("Error al crear el usuario:", error);
-    if (error.code === '23505') {
-      res.status(409).json({ message: "El DNI o correo ya están registrados" });
-    } else {
-      res.status(500).json({ message: "Error al crear el usuario" });
-    }
+    res.status(500).json({ message: "Error al crear el usuario" });
   }
 };
 
@@ -92,11 +97,11 @@ export const deleteUsuario = async (req, res) => {
 
 // Actualizar Usuario
 export const updateUsuario = async (req, res) => {
-  const { dni } = req.params; // Recibir dni como parámetro en la ruta
+  const { CorreoElectronico } = req.params; // ahora viene por la URL
   const {
     Nombre,
     Apellido,
-    CorreoElectronico,
+    Dni,
     NumeroTelefono,
     Nacionalidad,
     Pais,
@@ -116,33 +121,34 @@ export const updateUsuario = async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
+    const hashedPassword = await bcrypt.hash(Contrasena, 10);
+
     const update = await client.query(
       `UPDATE public."Usuario"
        SET "Nombre" = $1,
            "Apellido" = $2,
            "Dni" = $3,
-           "CorreoElectronico" = $4,
-           "NumeroTelefono" = $5,
-           "Nacionalidad" = $6,
-           "Pais" = $7,
-           "ProvinciaEstado" = $8,
-           "Ciudad" = $9,
-           "Direccion" = $10,
-           "Contrasena"= $11
-       WHERE "CorreoElectronico" = $12
+           "NumeroTelefono" = $4,
+           "Nacionalidad" = $5,
+           "Pais" = $6,
+           "ProvinciaEstado" = $7,
+           "Ciudad" = $8,
+           "Direccion" = $9,
+           "Contrasena" = $10
+       WHERE "CorreoElectronico" = $11
        RETURNING *`,
       [
         Nombre,
         Apellido,
         Dni,
-        CorreoElectronico,
         NumeroTelefono,
         Nacionalidad,
         Pais,
         ProvinciaEstado,
         Ciudad,
         Direccion,
-        Contrasena
+        hashedPassword,
+        CorreoElectronico
       ]
     );
 
