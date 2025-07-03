@@ -75,14 +75,14 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3000/Publicaciones
+POST http://localhost:3000/api/Publicaciones
 Content-Type: multipart/form-data
 
 {
-  "Pais": "",
-  "ProvinciaEstado": "",
-  "Direccion": "",
-  "Descripcion": "", 
+  "Pais": "Argentina",
+  "ProvinciaEstado": "Buenos Aires",
+  "Direccion": "Caseros 1234",
+  "Descripcion": "Casa de dos pisos", 
   "Fotos": "",
 }
 
