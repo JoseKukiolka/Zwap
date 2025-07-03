@@ -46,7 +46,7 @@ Content-Type: application/json
   "Contrasena": "Contraseña"
 }
 
-### Inicio Sesion
+### Inicio Sesion (Funciona)
 POST http://localhost:3000/login
 Content-Type: application/json
 
@@ -55,7 +55,7 @@ Content-Type: application/json
   "Contrasena": "Password"
 }
 
-### Pedir codigo para cambiar la contraseña
+### Pedir codigo para cambiar la contraseña (Funciona)
 POST http://localhost:3000/recuperar
 Content-Type: application/json
 
@@ -63,7 +63,7 @@ Content-Type: application/json
   "CorreoElectronico": "josefinakukiolka@gmail.com"
 }
 
-### Cambiar la contraseña 
+### Cambiar la contraseña (Funciona)
 POST http://localhost:3000/restablecer
 Content-Type: application/json
 
@@ -72,3 +72,4 @@ Content-Type: application/json
   "Codigo": "658040",
   "NuevaContrasena": "Nueva"
 }
+
