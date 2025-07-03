@@ -11,8 +11,8 @@ router.post('/Publicaciones', upload.single('imagen'), async (req, res) => {
     const { titulo, descripcion } = req.body;
 
     const result = await pool.query(
-      'INSERT INTO public."Publicaciones" (Titulo, Descripcion, Imagen_url) VALUES ($1, $2, $3) RETURNING *',
-      [titulo, descripcion, imageUrl]
+      'INSERT INTO public."Publicaciones" (Pais, ProvinciaEstado, Direccion, Descripcion, Fotos) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [Pais, ProvinciaEstado, Direccion, Descripcion, Fotos]
     );
 
     res.status(201).json({

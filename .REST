@@ -24,7 +24,7 @@ Content-Type: application/json
 
 {
   "CorreoElectronico": "josefinakukiolka@gmail.com",
-  "Contrasena": "Password"
+  "Contrasena": "Nueva"
 }
 
 ### Actualizar Usuario (Funciona)
@@ -79,6 +79,10 @@ POST http://localhost:3000/Publicaciones
 Content-Type: multipart/form-data
 
 {
-  
+  "Pais": "",
+  "ProvinciaEstado": "",
+  "Direccion": "",
+  "Descripcion": "", 
+  "Fotos": "",
 }
 

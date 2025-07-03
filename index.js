@@ -1,16 +1,19 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 
 import {
   createUsuario,
   deleteUsuario,
   updateUsuario,
   loginUsuario,
-  solicitarCodigo, 
-  cambiarContrasenaConCodigo
+  solicitarCodigo,
+  cambiarContrasenaConCodigo,
 } from "./Usuario.js";
 
-import publicacionesRouter from './Publicaciones.js';
+import publicacionesRouter from "./Publicaciones.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -18,32 +21,21 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api', publicacionesRouter);
+app.use("/api", publicacionesRouter);
 
-// Ruta raíz - simple para testear servidor
+// Ruta raíz
 app.get("/", (req, res) => {
   res.send("Servidor funcionando!");
 });
 
-// Ruta para crear usuario (POST)
 app.post("/usuarios", createUsuario);
-
-// Ruta para eliminar usuario (DELETE)
-app.delete("/Usuario", deleteUsuario);
-
-// Actualizar usuario
-app.put("/Usuario/:CorreoElectronico", updateUsuario);
-
-// Inicio Sesión
+app.delete("/usuarios", deleteUsuario);
+app.put("/usuarios/:CorreoElectronico", updateUsuario);
 app.post("/login", loginUsuario);
-
-// Pedir código para cambiar la contraseña
 app.post("/recuperar", solicitarCodigo);
-
-// Cambiar la contraseña
 app.post("/restablecer", cambiarContrasenaConCodigo);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
