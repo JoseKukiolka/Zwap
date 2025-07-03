@@ -71,5 +71,14 @@ Content-Type: application/json
   "CorreoElectronico": "josefinakukiolka@gmail.com",
   "Codigo": "658040",
   "NuevaContrasena": "Nueva"
-}z
+}
+
+###
+
+POST http://localhost:3000/Publicaciones
+Content-Type: multipart/form-data
+
+{
+  
+}
 
