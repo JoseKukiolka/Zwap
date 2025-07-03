@@ -1,5 +1,8 @@
 import bcrypt from 'bcrypt';
 import { client } from './db.js';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Crear Usuario
 export const createUsuario = async (req, res) => {
@@ -226,13 +229,17 @@ export const solicitarCodigo = async (req, res) => {
     `, [CorreoElectronico, codigo, expira]);
 
     // Enviar correo con código
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'tuCorreo@gmail.com',
-        pass: 'tuContraseñaAppGoogle' // No tu contraseña real
-      }
-    });
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD
+  }
+});
+
+   
+
 
     await transporter.sendMail({
       from: 'tuCorreo@gmail.com',

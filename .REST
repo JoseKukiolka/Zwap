@@ -7,7 +7,7 @@ Content-Type: application/json
   "Nombre": "Jose",
   "Apellido": "Kukiolka",
   "Dni": "48459624",
-  "CorreoElectronico": "abc@gmail.com",
+  "CorreoElectronico": "josefinakukiolka@gmail.com",
   "NumeroTelefono": "116883424",
   "Nacionalidad": "Argentina",
   "Pais": "Argentina",
@@ -23,7 +23,7 @@ DELETE http://localhost:3000/Usuario
 Content-Type: application/json
 
 {
-  "CorreoElectronico": "abc@gmail.com",
+  "CorreoElectronico": "josefinakukiolka@gmail.com",
   "Contrasena": "Password"
 }
 
@@ -51,8 +51,8 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-  "CorreoElectronico": "abc@gmail.com",
-  "Contrasena": "Contraseña"
+  "CorreoElectronico": "josefinakukiolka@gmail.com",
+  "Contrasena": "Password"
 }
 
 ### Pedir codigo para cambiar la contraseña
@@ -60,7 +60,7 @@ POST http://localhost:3000/recuperar
 Content-Type: application/json
 
 {
-  "CorreoElectronico": "abc@gmail.com"
+  "CorreoElectronico": "josefinakukiolka@gmail.com"
 }
 
 ### Cambiar la contraseña 
@@ -68,7 +68,7 @@ POST http://localhost:3000/restablecer
 Content-Type: application/json
 
 {
-  "CorreoElectronico": "abc@gmail.com",
+  "CorreoElectronico": "josefinakukiolka@gmail.com",
   "Codigo": "123456",
   "NuevaContrasena": "Nueva123"
 }
