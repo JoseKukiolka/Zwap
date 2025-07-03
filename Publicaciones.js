@@ -1,41 +1,28 @@
-import { client } from "./db.js";
+import express from 'express';
+import upload from './multer.js';
+import { pool } from './db.js';
 
-//Subir una publicacion
+const router = express.Router();
 
-export const createPublicacion = async (req, res) => {
-    try {
-      const {
-        Pais,
-        ProvinciaEstado,
-        Ciudad,
-        Direccion,
-        Fotos,
-        InfoAdicional
-      } = req.body;
-  
-      // Validación de campos obligatorios
-      if (!Pais || !ProvinciaEstado || !Direccion || !Fotos) {
-        return res.status(400).json({ message: "Faltan campos obligatorios" });
-      }
-  
-      const { rows } = await client.query(
-        `INSERT INTO public."Publicaciones" 
-        ("Pais", "ProvinciaEstado", "Ciudad", "Direccion", "Fotos", "InfoAdicional") 
-        VALUES ($1, $2, $3, $4, $5, $6) 
-        RETURNING *`,
-        [Pais, ProvinciaEstado, Ciudad, Direccion, Fotos, InfoAdicional]
-      );
-  
-      res.status(201).json({
-        message: "Publicación creada correctamente",
-        publicacion: rows[0]
-      });
-  
-    } catch (error) {
-      console.error("Error al crear la Publicación:", error);
-      res.status(500).json({ message: "Error interno del servidor" });
-    }
-  };
+// Ruta para subir imagen + info
+router.post('/Publicaciones', upload.single('imagen'), async (req, res) => {
+  try {
+    const imageUrl = req.file.path;
+    const { titulo, descripcion } = req.body;
 
+    const result = await pool.query(
+      'INSERT INTO public."Publicaciones" (titulo, descripcion, imagen_url) VALUES ($1, $2, $3) RETURNING *',
+      [titulo, descripcion, imageUrl]
+    );
 
-  
+    res.status(201).json({
+      message: 'Publicación creada correctamente',
+      publicacion: result.rows[0],
+    });
+  } catch (error) {
+    console.error('Error al subir la publicación:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+export default router;

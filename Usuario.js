@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { client } from './db.js';
+import { pool } from './db.js';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -26,7 +26,7 @@ export const createUsuario = async (req, res) => {
 
   try {
     // Verificar si el correo ya existe
-    const existente = await client.query(
+    const existente = await pool.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
     );
@@ -37,7 +37,7 @@ export const createUsuario = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(Contrasena, 10);
 
-    const { rows } = await client.query(
+    const { rows } = await pool.query(
       `INSERT INTO public."Usuario" 
       ("Nombre", "Apellido", "Dni", "Contrasena", "CorreoElectronico", "NumeroTelefono", "Nacionalidad", "Pais", "ProvinciaEstado", "Ciudad", "Direccion") 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
@@ -69,7 +69,7 @@ export const deleteUsuario = async (req, res) => {
   const { CorreoElectronico, Contrasena } = req.body;
 
   try {
-    const result = await client.query(
+    const result = await pool.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
     );
@@ -86,7 +86,7 @@ export const deleteUsuario = async (req, res) => {
       return res.status(401).json({ message: "Contraseña incorrecta" });
     }
 
-    await client.query(
+    await pool.query(
       `DELETE FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
     );
@@ -116,7 +116,7 @@ export const updateUsuario = async (req, res) => {
   } = req.body;
 
   try {
-    const result = await client.query(
+    const result = await pool.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
     );
@@ -127,7 +127,7 @@ export const updateUsuario = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(Contrasena, 10);
 
-    const update = await client.query(
+    const update = await pool.query(
       `UPDATE public."Usuario"
        SET "Nombre" = $1,
            "Apellido" = $2,
@@ -170,7 +170,7 @@ export const loginUsuario = async (req, res) => {
 
   try {
     // 1. Buscar usuario por correo
-    const result = await client.query(
+    const result = await pool.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
     );
@@ -207,7 +207,7 @@ export const solicitarCodigo = async (req, res) => {
 
   try {
     // Verificamos que el usuario exista
-    const result = await client.query(
+    const result = await pool.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
     );
@@ -221,7 +221,7 @@ export const solicitarCodigo = async (req, res) => {
     const expira = new Date(Date.now() + 10 * 60000); // 10 minutos
 
     // Guardar o actualizar en la tabla Recuperacion
-    await client.query(`
+    await pool.query(`
       INSERT INTO "Recuperacion" ("CorreoElectronico", "Codigo", "Expira")
       VALUES ($1, $2, $3)
       ON CONFLICT ("CorreoElectronico")
@@ -259,7 +259,7 @@ export const cambiarContrasenaConCodigo = async (req, res) => {
   const { CorreoElectronico, Codigo, NuevaContrasena } = req.body;
 
   try {
-    const result = await client.query(
+    const result = await pool.query(
       `SELECT * FROM "Recuperacion" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
     );
@@ -282,14 +282,14 @@ export const cambiarContrasenaConCodigo = async (req, res) => {
     const hashedPassword = await bcrypt.hash(NuevaContrasena, 10);
 
     // Actualizar contraseña
-    await client.query(`
+    await pool.query(`
       UPDATE "Usuario"
       SET "Contrasena" = $1
       WHERE "CorreoElectronico" = $2
     `, [hashedPassword, CorreoElectronico]);
 
     // Eliminar código de recuperación
-    await client.query(`DELETE FROM "Recuperacion" WHERE "CorreoElectronico" = $1`, [CorreoElectronico]);
+    await pool.query(`DELETE FROM "Recuperacion" WHERE "CorreoElectronico" = $1`, [CorreoElectronico]);
 
     res.json({ message: "Contraseña actualizada correctamente" });
   } catch (error) {

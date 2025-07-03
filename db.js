@@ -1,17 +1,16 @@
 import pkg from 'pg';
-const { Client } = pkg;
+import dotenv from 'dotenv';
 
-//Conectar con Postgresql
+dotenv.config();
 
-export const client = new Client({
-  user: 'postgres',           // o tu usuario
-  host: 'localhost',
-  database: 'postgres', // poné el mismo nombre que ves en pgAdmin
-  password: 'Zwap',
-  port: 5432,                 // puerto por defecto de PostgreSQL
+const { Pool } = pkg;
+
+const pool = new Pool({
+  host: process.env.PG_HOST,
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD,
+  database: process.env.PG_DATABASE,
+  port: Number(process.env.PG_PORT),
 });
 
-client.connect()
-
-  .then(() => console.log("✅ Conectado a PostgreSQL"))
-  .catch(err => console.error("❌ Error al conectar a PostgreSQL:", err));
+export { pool };
