@@ -69,6 +69,6 @@ Content-Type: application/json
 
 {
   "CorreoElectronico": "josefinakukiolka@gmail.com",
-  "Codigo": "123456",
+  "Codigo": "505572",
   "NuevaContrasena": "Nueva123"
 }
