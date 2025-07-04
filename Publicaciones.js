@@ -1,6 +1,7 @@
 import express from 'express';
 import upload from './multer.js';
 import { pool } from './db.js';
+import {verifyToken} from './middlewares.js';
 
 const router = express.Router();
 
