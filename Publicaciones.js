@@ -1,11 +1,12 @@
 import express from 'express';
 import upload from './multer.js';
+import { verificarToken } from './authMiddleware.js';
 import { pool } from './db.js';
 
 const router = express.Router();
 
 // Ruta para subir imagen + info
-router.post('/Publicaciones', upload.single('imagen'), async (req, res) => {
+router.post('/Publicaciones', verificarToken, upload.single('imagen'), async (req, res) => {
   try {
     const Fotos = req.file.path;
     const { Pais, ProvinciaEstado, Direccion, Descripcion } = req.body;

@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt';
 import { pool } from './db.js';
 import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 // Crear Usuario
@@ -169,7 +171,6 @@ export const loginUsuario = async (req, res) => {
   const { CorreoElectronico, Contrasena } = req.body;
 
   try {
-    // 1. Buscar usuario por correo
     const result = await pool.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
@@ -180,20 +181,25 @@ export const loginUsuario = async (req, res) => {
     }
 
     const usuario = result.rows[0];
-
-    // 2. Comparar contraseña con bcrypt
     const passMatch = await bcrypt.compare(Contrasena, usuario.Contrasena);
 
     if (!passMatch) {
       return res.status(401).json({ message: "Correo o contraseña incorrectos" });
     }
 
-    // 3. Login exitoso - devolver datos o token
-    res.json({ message: "Inicio de sesión exitoso", usuario: {
-      Nombre: usuario.Nombre,
-      Apellido: usuario.Apellido,
-      CorreoElectronico: usuario.CorreoElectronico,
-    }});
+    const token = jwt.sign(
+      {
+        id: usuario.id,
+        CorreoElectronico: usuario.CorreoElectronico
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    res.json({
+      message: "Inicio de sesión exitoso",
+      token: token
+    });
   } catch (error) {
     console.error("Error en login:", error);
     res.status(500).json({ message: "Error del servidor" });

@@ -76,7 +76,8 @@ Content-Type: application/json
 ###
 
 POST http://localhost:3000/api/Publicaciones
-Content-Type: multipart/form-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb3JyZW9FbGVjdHJvbmljbyI6Impvc2VmaW5ha3VraW9sa2FAZ21haWwuY29tIiwiaWF0IjoxNzUxOTc5NjgwLCJleHAiOjE3NTE5ODY4ODB9.FuyXNtbQHyN4g48-mlKwFOnNSn2mnNQM1BrQ08qPhho
+
 
 {
   "Pais": "Argentina",
