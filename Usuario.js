@@ -1,10 +1,18 @@
 import bcrypt from 'bcrypt';
 import { pool } from './db.js';
 import nodemailer from 'nodemailer';
+<<<<<<< HEAD
 import jwt from 'jsonwebtoken';
+=======
+import jwt from "jsonwebtoken";
+>>>>>>> 8ee9b2a8ad0d8c4d225570c67a66fa5d8a229422
 import dotenv from 'dotenv';
 
 dotenv.config();
+const apiKey = process.env.API_KEY;
+console.log(apiKey);
+
+const token = process.env.API_TOKEN;
 
 // Crear Usuario
 export const createUsuario = async (req, res) => {
@@ -165,6 +173,41 @@ export const updateUsuario = async (req, res) => {
   }
 };
 
+//Registrarse
+
+// export const register = async (req, res) => {
+//   try {
+//     console.log(req.body)
+//     const { Nombre, Apellido, Pais, Dni, FechaNacimiento, CorreoElectronico, Contraseña } = req.body;
+//     if (!Nombre || !Apellido || !Pais || !Dni || !FechaNacimiento || !CorreoElectronico || !Contraseña) return res.status(400).send("Falta completar campos");
+//     const usuarioExiste = await getUsuario(CorreoElectronico)
+//     if (usuarioExiste) return res.status(400).json({ message: `Usuario con Correo Electronico ${CorreoElectronico} ya existe`, user: usuarioExiste });
+//     console.log(
+//       Nombre,
+//       Apellido,
+//       CorreoElectronico
+//     );
+//     const passwordHashed = await bcrypt.hash(Contraseña, 10);
+//     const GuardarUsuario = await createUsuario(Nombre,
+//       Apellido, 
+//       Dni, 
+//       CorreoElectronico, 
+//       Contraseña, 
+//       NumeroTelefono, 
+//       Nacionalidad, 
+//       Pais,
+//       ProvinciaEstado,
+//       Ciudad, 
+//       Direccion);
+//     return res.status(201).json({ message: "Usuario registrado correctamente" });
+//   } catch (error) {
+//     console.log(error)
+//     res.status(500).json({ message: "Error durante la creación del usuario" });
+//   }
+
+// };
+
+
 //Inicio Sesion
 
 export const loginUsuario = async (req, res) => {
@@ -187,6 +230,7 @@ export const loginUsuario = async (req, res) => {
       return res.status(401).json({ message: "Correo o contraseña incorrectos" });
     }
 
+<<<<<<< HEAD
     const token = jwt.sign(
       {
         id: usuario.id,
@@ -200,11 +244,39 @@ export const loginUsuario = async (req, res) => {
       message: "Inicio de sesión exitoso",
       token: token
     });
+=======
+    const token = jwt.sign({ CorreoElectronico: usuario.CorreoElectronico }, process.env.JWT_SECRET, { expiresIn: '50m' });
+
+    return res.status(200).json({
+      message: 'Inicio de sesión exitoso',
+      usuario: {
+        CorreoElectronico: usuario.CorreoElectronico,
+        Nombre: usuario.Nombre,
+        Apellido: usuario.Apellido
+      },
+      token: token
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send("Error en el proceso de inicio de sesión");
+  }
+  try {
+
+    // 3. Login exitoso - devolver datos o token
+    res.json({
+      message: "Inicio de sesión exitoso", usuario: {
+        Nombre: usuario.Nombre,
+        Apellido: usuario.Apellido,
+        CorreoElectronico: usuario.CorreoElectronico,
+      }
+    });
+>>>>>>> 8ee9b2a8ad0d8c4d225570c67a66fa5d8a229422
   } catch (error) {
     console.error("Error en login:", error);
     res.status(500).json({ message: "Error del servidor" });
   }
 };
+
 
 // Recuperar / Cambiar contraseña
 
@@ -236,16 +308,13 @@ export const solicitarCodigo = async (req, res) => {
 
     // Enviar correo con código
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD
-  }
-});
-
-   
-
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD
+      }
+    });
 
     await transporter.sendMail({
       from: 'tuCorreo@gmail.com',
