@@ -1,11 +1,7 @@
 import bcrypt from 'bcrypt';
 import { pool } from './db.js';
 import nodemailer from 'nodemailer';
-<<<<<<< HEAD
 import jwt from 'jsonwebtoken';
-=======
-import jwt from "jsonwebtoken";
->>>>>>> 8ee9b2a8ad0d8c4d225570c67a66fa5d8a229422
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -109,7 +105,6 @@ export const deleteUsuario = async (req, res) => {
 };
 
 // Actualizar Usuario
-
 export const updateUsuario = async (req, res) => {
   const { CorreoElectronico } = req.params;  // viene por URL
   const {
@@ -173,43 +168,7 @@ export const updateUsuario = async (req, res) => {
   }
 };
 
-//Registrarse
-
-// export const register = async (req, res) => {
-//   try {
-//     console.log(req.body)
-//     const { Nombre, Apellido, Pais, Dni, FechaNacimiento, CorreoElectronico, Contraseña } = req.body;
-//     if (!Nombre || !Apellido || !Pais || !Dni || !FechaNacimiento || !CorreoElectronico || !Contraseña) return res.status(400).send("Falta completar campos");
-//     const usuarioExiste = await getUsuario(CorreoElectronico)
-//     if (usuarioExiste) return res.status(400).json({ message: `Usuario con Correo Electronico ${CorreoElectronico} ya existe`, user: usuarioExiste });
-//     console.log(
-//       Nombre,
-//       Apellido,
-//       CorreoElectronico
-//     );
-//     const passwordHashed = await bcrypt.hash(Contraseña, 10);
-//     const GuardarUsuario = await createUsuario(Nombre,
-//       Apellido, 
-//       Dni, 
-//       CorreoElectronico, 
-//       Contraseña, 
-//       NumeroTelefono, 
-//       Nacionalidad, 
-//       Pais,
-//       ProvinciaEstado,
-//       Ciudad, 
-//       Direccion);
-//     return res.status(201).json({ message: "Usuario registrado correctamente" });
-//   } catch (error) {
-//     console.log(error)
-//     res.status(500).json({ message: "Error durante la creación del usuario" });
-//   }
-
-// };
-
-
-//Inicio Sesion
-
+// Inicio Sesión
 export const loginUsuario = async (req, res) => {
   const { CorreoElectronico, Contrasena } = req.body;
 
@@ -230,7 +189,6 @@ export const loginUsuario = async (req, res) => {
       return res.status(401).json({ message: "Correo o contraseña incorrectos" });
     }
 
-<<<<<<< HEAD
     const token = jwt.sign(
       {
         id: usuario.id,
@@ -239,13 +197,6 @@ export const loginUsuario = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '2h' }
     );
-
-    res.json({
-      message: "Inicio de sesión exitoso",
-      token: token
-    });
-=======
-    const token = jwt.sign({ CorreoElectronico: usuario.CorreoElectronico }, process.env.JWT_SECRET, { expiresIn: '50m' });
 
     return res.status(200).json({
       message: 'Inicio de sesión exitoso',
@@ -260,31 +211,13 @@ export const loginUsuario = async (req, res) => {
     console.log(error)
     res.status(500).send("Error en el proceso de inicio de sesión");
   }
-  try {
-
-    // 3. Login exitoso - devolver datos o token
-    res.json({
-      message: "Inicio de sesión exitoso", usuario: {
-        Nombre: usuario.Nombre,
-        Apellido: usuario.Apellido,
-        CorreoElectronico: usuario.CorreoElectronico,
-      }
-    });
->>>>>>> 8ee9b2a8ad0d8c4d225570c67a66fa5d8a229422
-  } catch (error) {
-    console.error("Error en login:", error);
-    res.status(500).json({ message: "Error del servidor" });
-  }
 };
 
-
 // Recuperar / Cambiar contraseña
-
 export const solicitarCodigo = async (req, res) => {
   const { CorreoElectronico } = req.body;
 
   try {
-    // Verificamos que el usuario exista
     const result = await pool.query(
       `SELECT * FROM public."Usuario" WHERE "CorreoElectronico" = $1`,
       [CorreoElectronico]
@@ -294,19 +227,15 @@ export const solicitarCodigo = async (req, res) => {
       return res.status(404).json({ message: "Correo no registrado" });
     }
 
-    // Crear código aleatorio
-    const codigo = Math.floor(100000 + Math.random() * 900000).toString(); // Ej: 6 dígitos
-    const expira = new Date(Date.now() + 10 * 60000); // 10 minutos
+    const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+    const expira = new Date(Date.now() + 10 * 60000);
 
-    // Guardar o actualizar en la tabla Recuperacion
     await pool.query(`
       INSERT INTO "Recuperacion" ("CorreoElectronico", "Codigo", "Expira")
       VALUES ($1, $2, $3)
       ON CONFLICT ("CorreoElectronico")
       DO UPDATE SET "Codigo" = $2, "Expira" = $3
     `, [CorreoElectronico, codigo, expira]);
-
-    // Enviar correo con código
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -353,17 +282,14 @@ export const cambiarContrasenaConCodigo = async (req, res) => {
       return res.status(400).json({ message: "Código expirado" });
     }
 
-    // Hashear la nueva contraseña
     const hashedPassword = await bcrypt.hash(NuevaContrasena, 10);
 
-    // Actualizar contraseña
     await pool.query(`
       UPDATE "Usuario"
       SET "Contrasena" = $1
       WHERE "CorreoElectronico" = $2
     `, [hashedPassword, CorreoElectronico]);
 
-    // Eliminar código de recuperación
     await pool.query(`DELETE FROM "Recuperacion" WHERE "CorreoElectronico" = $1`, [CorreoElectronico]);
 
     res.json({ message: "Contraseña actualizada correctamente" });
