@@ -38,7 +38,7 @@ router.put('/publicaciones/:id/paso2', verificarToken, async (req, res) => {
   try {
     const id = req.params.id;
     const {
-      NumeroPropiedades,
+      NumeroAmbientes,
       NumeroPisos,
       MetrosCuadrados,
       NombrePropiedad,
@@ -47,14 +47,14 @@ router.put('/publicaciones/:id/paso2', verificarToken, async (req, res) => {
 
     const result = await pool.query(
       `UPDATE public."Publicaciones" SET
-        NumeroPropiedades = $1,
+        NumeroAmbientes = $1,
         NumeroPisos = $2,
         MetrosCuadrados = $3,
         NombrePropiedad = $4,
         BreveDescripcion = $5
       WHERE id = $6 RETURNING *`,
       [
-        NumeroPropiedades,
+        NumeroAmbientes,
         NumeroPisos,
         MetrosCuadrados,
         NombrePropiedad,
@@ -77,13 +77,13 @@ router.put('/publicaciones/:id/paso2', verificarToken, async (req, res) => {
 router.put('/publicaciones/:id/paso3', verificarToken, async (req, res) => {
   try {
     const id = req.params.id;
-    const { amenities } = req.body; // amenities es un array de strings
+    const { Amenities } = req.body; // amenities es un array de strings
 
     const result = await pool.query(
       `UPDATE public."Publicaciones" SET
         Amenities = $1
       WHERE id = $2 RETURNING *`,
-      [amenities, id]
+      [Amenities, id]
     );
 
     res.status(200).json({

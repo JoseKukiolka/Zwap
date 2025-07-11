@@ -96,7 +96,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb3JyZW9FbGVjdHJvb
 Content-Type: application/json
 
 {
-  "NumeroPropiedades": 1,
+  "NumeroAmbientes": 1,
   "NumeroPisos": 2,
   "MetrosCuadrados": 120,
   "NombrePropiedad": "Casa Familiar",
@@ -110,7 +110,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb3JyZW9FbGVjdHJvb
 Content-Type: application/json
 
 {
-  "amenities": ["Pileta", "Parrilla", "Balcón"]
+  "Amenities": ["Pileta", "Parrilla", "Balcón"]
 }
 
 ### 4
