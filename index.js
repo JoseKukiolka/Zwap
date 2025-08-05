@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { pool } from "./db.js"; // 👈 Importar conexión a Neon
 
 import {
   createUsuario,
@@ -11,9 +12,18 @@ import {
   cambiarContrasenaConCodigo,
 } from "./Usuario.js";
 
-import publicacionesRouter from "./Publicaciones.js"; // ✅ Importación corregida
+import publicacionesRouter from "./Publicaciones.js";
 
 dotenv.config();
+
+// ✅ Test de conexión a Neon
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.error('❌ Error conectando a Neon:', err);
+  } else {
+    console.log('✅ Conexión exitosa a Neon:', res.rows);
+  }
+});
 
 const app = express();
 
