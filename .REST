@@ -73,53 +73,23 @@ Content-Type: application/json
   "NuevaContrasena": "Nueva"
 }
 
-// PASOS DE SUBIDA DE PUBLICACION
+### SUBIDA PUBLICACIONES
 
-### 1
-
-POST http://localhost:3000/api/publicaciones/paso1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb3JyZW9FbGVjdHJvbmljbyI6Impvc2VmaW5ha3VraW9sa2FAZ21haWwuY29tIiwiaWF0IjoxNzUyMjQ1MDM5LCJleHAiOjE3NTIyNTIyMzl9.yFxaLEBcMc08r2-G6YgdBV7b4mZFyokdPipu9AJZhDQ
-Content-Type: application/json
+POST http://localhost:3000/api/publicaciones
+Authorization: Bearer TU_TOKEN
+Content-Type: multipart/form-data
 
 {
   "Pais": "Argentina",
   "ProvinciaEstado": "Buenos Aires",
   "CiudadLocalidad": "Morón",
   "CalleYNumero": "Caseros 1234",
-  "TipoPropiedad": "Casa"
-}
-
-### 2
-
-PUT http://localhost:3000/api/publicaciones/ID_AQUI/paso2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb3JyZW9FbGVjdHJvbmljbyI6Impvc2VmaW5ha3VraW9sa2FAZ21haWwuY29tIiwiaWF0IjoxNzUyMjQ1MDM5LCJleHAiOjE3NTIyNTIyMzl9.yFxaLEBcMc08r2-G6YgdBV7b4mZFyokdPipu9AJZhDQ
-Content-Type: application/json
-
-{
+  "TipoPropiedad": "Casa",
   "NumeroAmbientes": 1,
   "NumeroPisos": 2,
   "MetrosCuadrados": 120,
   "NombrePropiedad": "Casa Familiar",
-  "BreveDescripcion": "Casa de dos pisos, ideal para familia."
+  "BreveDescripcion": "Casa de dos pisos, ideal para familia.",
+  "Amenities": ["Pileta","Parrilla","Balcón"],
+  "imagenes": "(Adjuntar archivo(s) imágenes en form-data)"
 }
-
-### 3
-
-PUT http://localhost:3000/api/publicaciones/ID_AQUI/paso3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb3JyZW9FbGVjdHJvbmljbyI6Impvc2VmaW5ha3VraW9sa2FAZ21haWwuY29tIiwiaWF0IjoxNzUyMjQ1MDM5LCJleHAiOjE3NTIyNTIyMzl9.yFxaLEBcMc08r2-G6YgdBV7b4mZFyokdPipu9AJZhDQ
-Content-Type: application/json
-
-{
-  "Amenities": ["Pileta", "Parrilla", "Balcón"]
-}
-
-### 4
-
-PUT http://localhost:3000/api/publicaciones/ID_AQUI/paso4
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb3JyZW9FbGVjdHJvbmljbyI6Impvc2VmaW5ha3VraW9sa2FAZ21haWwuY29tIiwiaWF0IjoxNzUyMjQ1MDM5LCJleHAiOjE3NTIyNTIyMzl9.yFxaLEBcMc08r2-G6YgdBV7b4mZFyokdPipu9AJZhDQ
-Content-Type: multipart/form-data
-
-{
-  "Fotos": ""
-}
-
