@@ -24,12 +24,12 @@ Content-Type: application/json
 
 {
   "CorreoElectronico": "josefinakukiolka@gmail.com",
-  "Contrasena": "Nueva"
+  "Contrasena": "Password"
 }
 
 ### Actualizar Usuario (Funciona)
 
-PUT http://localhost:3000/Usuario/abc@gmail.com
+PUT http://localhost:3000/Usuario/josefinakukiolka@gmail.com
 Content-Type: application/json
 
 {

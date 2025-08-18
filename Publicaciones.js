@@ -1,6 +1,6 @@
 import express from "express";
 import upload from "./multer.js";
-import { verifyToken } from "./authMiddleware.js"; // cambio a verifyToken
+import { verifyToken } from "./authMiddleware.js";
 import { pool } from "./db.js";
 
 const router = express.Router();
@@ -19,11 +19,21 @@ router.post("/publicaciones", verifyToken, upload.array("imagenes", 10), async (
       MetrosCuadrados,
       NombrePropiedad,
       BreveDescripcion,
-      Amenities // array de strings
+      Amenities // array de strings en JSON
     } = req.body;
 
     // URLs de Cloudinary
     const urls = req.files.map(file => file.path);
+
+    // Parsear Amenities si vienen como string JSON
+    let amenitiesArray = null;
+    if (Amenities) {
+      try {
+        amenitiesArray = JSON.parse(Amenities);
+      } catch {
+        amenitiesArray = Array.isArray(Amenities) ? Amenities : [Amenities];
+      }
+    }
 
     const result = await pool.query(
       `INSERT INTO public."Publicaciones" 
@@ -42,7 +52,7 @@ router.post("/publicaciones", verifyToken, upload.array("imagenes", 10), async (
         MetrosCuadrados,
         NombrePropiedad,
         BreveDescripcion,
-        Amenities ? JSON.parse(Amenities) : null,
+        amenitiesArray,
         urls
       ]
     );

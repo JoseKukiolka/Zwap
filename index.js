@@ -16,12 +16,15 @@ import publicacionesRouter from "./Publicaciones.js";
 
 dotenv.config();
 
+// 🔎 Debug: mostrar si se cargó DATABASE_URL
+console.log("DATABASE_URL:", process.env.DATABASE_URL || "No definida");
+
 // ✅ Test de conexión a Neon
-pool.query('SELECT NOW()', (err, res) => {
+pool.query("SELECT NOW()", (err, res) => {
   if (err) {
-    console.error('❌ Error conectando a Neon:', err);
+    console.error("❌ Error conectando a Neon:", err);
   } else {
-    console.log('✅ Conexión exitosa a Neon:', res.rows);
+    console.log("✅ Conexión exitosa a Neon:", res.rows);
   }
 });
 
@@ -39,14 +42,14 @@ app.get("/", (req, res) => {
   res.send("Servidor funcionando!");
 });
 
-// Ruta para crear usuario
+// Crear usuario
 app.post("/usuarios", createUsuario);
 
-// Ruta para eliminar usuario
-app.delete("/usuarios", deleteUsuario);
+// Eliminar usuario (body JSON con CorreoElectronico y Contrasena)
+app.delete("/Usuario", deleteUsuario);
 
-// Actualizar usuario
-app.put("/usuarios/:CorreoElectronico", updateUsuario);
+// Actualizar usuario por CorreoElectronico
+app.put("/Usuario/:CorreoElectronico", updateUsuario);
 
 // Inicio Sesión
 app.post("/login", loginUsuario);
