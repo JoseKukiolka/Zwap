@@ -52,7 +52,7 @@ Content-Type: application/json
 
 {
   "CorreoElectronico": "josefinakukiolka@gmail.com",
-  "Contrasena": "Password"
+  "Contrasena": "Contraseña"
 }
 
 ### Pedir codigo por mail para cambiar la contraseña (Funciona)
@@ -76,7 +76,7 @@ Content-Type: application/json
 ### SUBIDA PUBLICACIONES
 
 POST http://localhost:3000/api/publicaciones
-Authorization: Bearer TU_TOKEN
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiQ29ycmVvRWxlY3Ryb25pY28iOiJqb3NlZmluYWt1a2lvbGthQGdtYWlsLmNvbSIsImlhdCI6MTc1NTUyODg2NCwiZXhwIjoxNzU1NTM2MDY0fQ.mHxIdq5I1iE-6XFxeibZsuaF2zGY4gx2lW0bVxdKiXc
 Content-Type: multipart/form-data
 
 {
@@ -90,6 +90,6 @@ Content-Type: multipart/form-data
   "MetrosCuadrados": 120,
   "NombrePropiedad": "Casa Familiar",
   "BreveDescripcion": "Casa de dos pisos, ideal para familia.",
-  "Amenities": ["Pileta","Parrilla","Balcón"],
-  "imagenes": "(Adjuntar archivo(s) imágenes en form-data)"
+  "Amenities": ["Pileta","Parrilla","Balcón","Jardin","Wifi","AireAcondicionado","Calefaccion","Cochera","Gimnasio","Cocina Equipada","Seguridad","Sauna","MascotasPermitidas","Deposito"],
+  "imagen": "./Zwap/pexels-photo-2531237-1.jpg"
 }
