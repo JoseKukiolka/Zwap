@@ -29,11 +29,10 @@ Content-Type: application/json
 
 ### Actualizar Usuario (Funciona)
 
-PUT http://localhost:3000/Usuario/josefinakukiolka@gmail.com
+PUT http://localhost:3000/Usuario/48459624@est.ort.edu.ar
 Content-Type: application/json
 
 {
-
  "Nombre": "Jose",
   "Apellido": "Kukiolka",
   "Dni": "12345678",
@@ -42,8 +41,7 @@ Content-Type: application/json
   "Pais": "Argentina",
   "ProvinciaEstado": "Buenos Aires",
   "Ciudad": "CABA",
-  "Direccion": "Montañeses 2345 ",
-  "Contrasena": "Contraseña"
+  "Direccion": "Montañeses 2345 "
 }
 
 ### Inicio Sesion (Funciona)
@@ -93,3 +91,4 @@ Content-Type: multipart/form-data
   "Amenities": ["Pileta","Parrilla","Balcón","Jardin","Wifi","AireAcondicionado","Calefaccion","Cochera","Gimnasio","Cocina Equipada","Seguridad","Sauna","MascotasPermitidas","Deposito"],
   "imagen": "./Zwap/pexels-photo-2531237-1.jpg"
 }
+

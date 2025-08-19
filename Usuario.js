@@ -116,8 +116,7 @@ export const updateUsuario = async (req, res) => {
     Pais,
     ProvinciaEstado,
     Ciudad,
-    Direccion,
-    Contrasena
+    Direccion
   } = req.body;
 
   try {
@@ -130,8 +129,6 @@ export const updateUsuario = async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    const hashedPassword = await bcrypt.hash(Contrasena, 10);
-
     const update = await pool.query(
       `UPDATE public."Usuario"
        SET "Nombre" = $1,
@@ -142,9 +139,8 @@ export const updateUsuario = async (req, res) => {
            "Pais" = $6,
            "ProvinciaEstado" = $7,
            "Ciudad" = $8,
-           "Direccion" = $9,
-           "Contrasena" = $10
-       WHERE "CorreoElectronico" = $11
+           "Direccion" = $9
+       WHERE "CorreoElectronico" = $10
        RETURNING *`,
       [
         Nombre,
@@ -156,12 +152,14 @@ export const updateUsuario = async (req, res) => {
         ProvinciaEstado,
         Ciudad,
         Direccion,
-        hashedPassword,
         CorreoElectronico
       ]
     );
 
-    res.json({ message: "Usuario actualizado correctamente", usuario: update.rows[0] });
+    res.json({
+      message: "Usuario actualizado correctamente",
+      usuario: update.rows[0]
+    });
   } catch (error) {
     console.error("Error al actualizar el usuario:", error);
     res.status(500).json({ message: "Error del servidor al actualizar el usuario" });
