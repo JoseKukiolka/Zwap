@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { pool } from './db.js';
-import nodemailer from 'nodemailer';
+import transporter from './mail.js';   // ✅ usamos mail.js
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
@@ -213,7 +213,7 @@ export const loginUsuario = async (req, res) => {
   }
 };
 
-// Recuperar / Cambiar contraseña
+// Recuperar / Solicitar código
 export const solicitarCodigo = async (req, res) => {
   const { CorreoElectronico } = req.body;
 
@@ -228,7 +228,7 @@ export const solicitarCodigo = async (req, res) => {
     }
 
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-    const expira = new Date(Date.now() + 10 * 60000);
+    const expira = new Date(Date.now() + 10 * 60000); // 10 minutos
 
     await pool.query(`
       INSERT INTO "Recuperacion" ("CorreoElectronico", "Codigo", "Expira")
@@ -237,18 +237,10 @@ export const solicitarCodigo = async (req, res) => {
       DO UPDATE SET "Codigo" = $2, "Expira" = $3
     `, [CorreoElectronico, codigo, expira]);
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD
-      }
-    });
-
     await transporter.sendMail({
-      from: 'tuCorreo@gmail.com',
+      from: process.env.GMAIL_USER,  // ✅ ahora coincide con el auth
       to: CorreoElectronico,
-      subject: 'Código para restablecer tu contraseña',
+      subject: "Código para restablecer tu contraseña",
       text: `Tu código de recuperación es: ${codigo}`
     });
 
@@ -259,6 +251,7 @@ export const solicitarCodigo = async (req, res) => {
   }
 };
 
+// Cambiar contraseña con código
 export const cambiarContrasenaConCodigo = async (req, res) => {
   const { CorreoElectronico, Codigo, NuevaContrasena } = req.body;
 
