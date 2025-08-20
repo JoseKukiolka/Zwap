@@ -5,6 +5,7 @@ import { pool } from "./db.js";
 
 const router = express.Router();
 
+// Crear publicación en un solo paso
 router.post("/publicaciones", verifyToken, upload.array("imagenes", 10), async (req, res) => {
   try {
     const {
@@ -21,10 +22,10 @@ router.post("/publicaciones", verifyToken, upload.array("imagenes", 10), async (
       Amenities
     } = req.body;
 
-    // URLs de Cloudinary ya guardadas en file.path
+    // URLs de Cloudinary
     const urls = req.files.map(file => file.path);
 
-    // Parsear Amenities
+    // Parsear Amenities si vienen como string JSON
     let amenitiesArray = [];
     if (Amenities) {
       try {
