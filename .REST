@@ -50,7 +50,7 @@ Content-Type: application/json
 
 {
   "CorreoElectronico": "josefinakukiolka@gmail.com",
-  "Contrasena": "Contraseña"
+  "Contrasena": "Password"
 }
 
 ### Pedir codigo por mail para cambiar la contraseña (Funciona)
@@ -89,6 +89,6 @@ Content-Type: multipart/form-data
   "NombrePropiedad": "Casa Familiar",
   "BreveDescripcion": "Casa de dos pisos, ideal para familia.",
   "Amenities": ["Pileta","Parrilla","Balcón","Jardin","Wifi","AireAcondicionado","Calefaccion","Cochera","Gimnasio","Cocina Equipada","Seguridad","Sauna","MascotasPermitidas","Deposito"],
-  "imagen": "./Zwap/pexels-photo-2531237-1.jpg"
+  "imagen": 
 }
 

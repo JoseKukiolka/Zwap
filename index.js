@@ -13,6 +13,7 @@ import {
 } from "./Usuario.js";
 
 import publicacionesRouter from "./Publicaciones.js";
+import favoritosRouter from "./Favoritos.js"; // 👈 Importar router de Favoritos
 
 dotenv.config();
 
@@ -35,7 +36,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // /api para las rutas de publicaciones
-app.use("/api", publicacionesRouter); // ✅ Solo una vez
+app.use("/api", publicacionesRouter); // ✅ Publicaciones
+
+// /api para las rutas de favoritos
+app.use("/api", favoritosRouter); // ✅ Favoritos
 
 // Ruta raíz
 app.get("/", (req, res) => {
