@@ -187,13 +187,14 @@ export const loginUsuario = async (req, res) => {
       return res.status(401).json({ message: "Correo o contraseña incorrectos" });
     }
 
+    // Token que nunca expira
     const token = jwt.sign(
       {
         id: usuario.id,
         CorreoElectronico: usuario.CorreoElectronico
       },
-      process.env.JWT_SECRET,
-      { expiresIn: '2h' }
+      process.env.JWT_SECRET
+      // ❌ Sin expiresIn
     );
 
     return res.status(200).json({
@@ -236,7 +237,7 @@ export const solicitarCodigo = async (req, res) => {
     `, [CorreoElectronico, codigo, expira]);
 
     await transporter.sendMail({
-      from: process.env.GMAIL_USER,  // ✅ ahora coincide con el auth
+      from: process.env.GMAIL_USER,
       to: CorreoElectronico,
       subject: "Código para restablecer tu contraseña",
       text: `Tu código de recuperación es: ${codigo}`

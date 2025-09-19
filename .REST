@@ -74,7 +74,7 @@ Content-Type: application/json
 ### SUBIDA PUBLICACIONES
 
 POST http://localhost:3000/api/publicaciones
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiQ29ycmVvRWxlY3Ryb25pY28iOiJqb3NlZmluYWt1a2lvbGthQGdtYWlsLmNvbSIsImlhdCI6MTc1NTcwMTg3MywiZXhwIjoxNzU1NzA5MDczfQ.VwmD4E7h7YoksQ0V3S7GnRifCfdAQCeihWqPyWuQR8M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDb3JyZW9FbGVjdHJvbmljbyI6Impvc2VmaW5ha3VraW9sa2FAZ21haWwuY29tIiwiaWF0IjoxNzU4MzAyODEyfQ.rsaitzYtqZ8xkGVScEh-KUnTa20u0A1L54-A3CFxei4
 Content-Type: multipart/form-data
 
 {
