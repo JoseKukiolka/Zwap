@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { pool } from "./db.js"; // 👈 Conexión a Neon
 
+import { pool } from "./db.js"; // Conexión a Neon
+
 // Importaciones de funciones de Usuario
 import {
   createUsuario,
@@ -15,12 +17,15 @@ import {
 
 // Importar routers
 import publicacionesRouter from "./Publicaciones.js";
+
 import favoritosRouter from "./Favoritos.js";
 import reseñasRouter from "./Reseñas.js"; // 👈 Nuevo router de Reseñas
 
+import favoritosRouter from "./Favoritos.js"; // Router de Favoritos
+
 dotenv.config();
 
-// 🔎 Debug: mostrar si se cargó DATABASE_URL
+// 🔎 Debug: mostrar DATABASE_URL
 console.log("DATABASE_URL:", process.env.DATABASE_URL || "No definida");
 
 // ✅ Test de conexión a Neon
@@ -38,15 +43,24 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 // ✅ Rutas principales
 app.use("/api", publicacionesRouter); // Publicaciones
 app.use("/api", favoritosRouter);     // Favoritos
 app.use("/api", reseñasRouter);       // 👈 Reseñas
 
+// Rutas de publicaciones
+app.use("/api", publicacionesRouter);
+
+// Rutas de favoritos
+app.use("/api", favoritosRouter);
+ 
+
 // Ruta raíz
 app.get("/", (req, res) => {
   res.send("Servidor funcionando!");
 });
+
 
 // ✅ Usuarios
 app.post("/usuarios", createUsuario);
@@ -55,6 +69,13 @@ app.put("/Usuario/:CorreoElectronico", updateUsuario);
 app.post("/login", loginUsuario);
 
 // ✅ Recuperar y restablecer contraseña
+// CRUD de usuarios
+app.post("/usuarios", createUsuario);
+app.delete("/Usuario", deleteUsuario);
+app.put("/Usuario/:CorreoElectronico", updateUsuario);
+
+// Inicio de sesión y recuperación de contraseña
+app.post("/login", loginUsuario);
 app.post("/recuperar", solicitarCodigo);
 app.post("/restablecer", cambiarContrasenaConCodigo);
 
