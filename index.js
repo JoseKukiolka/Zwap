@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { pool } from "./db.js"; // 👈 Importar conexión a Neon
+import { pool } from "./db.js"; // 👈 Conexión a Neon
 
+// Importaciones de funciones de Usuario
 import {
   createUsuario,
   deleteUsuario,
@@ -12,8 +13,10 @@ import {
   cambiarContrasenaConCodigo,
 } from "./Usuario.js";
 
+// Importar routers
 import publicacionesRouter from "./Publicaciones.js";
-import favoritosRouter from "./Favoritos.js"; // 👈 Importar router de Favoritos
+import favoritosRouter from "./Favoritos.js";
+import reseñasRouter from "./Reseñas.js"; // 👈 Nuevo router de Reseñas
 
 dotenv.config();
 
@@ -35,36 +38,27 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// /api para las rutas de publicaciones
-app.use("/api", publicacionesRouter); // ✅ Publicaciones
-
-// /api para las rutas de favoritos
-app.use("/api", favoritosRouter); // ✅ Favoritos
+// ✅ Rutas principales
+app.use("/api", publicacionesRouter); // Publicaciones
+app.use("/api", favoritosRouter);     // Favoritos
+app.use("/api", reseñasRouter);       // 👈 Reseñas
 
 // Ruta raíz
 app.get("/", (req, res) => {
   res.send("Servidor funcionando!");
 });
 
-// Crear usuario
+// ✅ Usuarios
 app.post("/usuarios", createUsuario);
-
-// Eliminar usuario (body JSON con CorreoElectronico y Contrasena)
 app.delete("/Usuario", deleteUsuario);
-
-// Actualizar usuario por CorreoElectronico
 app.put("/Usuario/:CorreoElectronico", updateUsuario);
-
-// Inicio Sesión
 app.post("/login", loginUsuario);
 
-// Recuperar contraseña
+// ✅ Recuperar y restablecer contraseña
 app.post("/recuperar", solicitarCodigo);
-
-// Restablecer contraseña
 app.post("/restablecer", cambiarContrasenaConCodigo);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor escuchando en http://localhost:${PORT}`);
 });
